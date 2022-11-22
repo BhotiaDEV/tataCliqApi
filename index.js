@@ -4,7 +4,8 @@ let dotenv = require("dotenv");
 dotenv.config();
 let mongo = require("mongodb");
 let MongoClient = mongo.MongoClient;
-let mongoURL = process.env.MongoURL;
+let mongoURL =
+  "mongodb+srv://test:test123@cluster0.v86nyzc.mongodb.net/?retryWrites=true&w=majority";
 let port = process.env.PORT || 7800;
 let bodyparser = require("body-parser");
 // const { RedoTwoTone } = require("@material-ui/icons");
