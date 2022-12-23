@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      res.send(result);
+      res.json(result);
     });
 });
 
@@ -36,7 +36,7 @@ app.get("/:categoryId", (req, res) => {
     .find({ category_id: categoryId })
     .toArray((err, result) => {
       if (err) throw err;
-      res.send(result);
+      res.json(result);
     });
 });
 
@@ -79,7 +79,7 @@ app.get("/filter/:productId", (req, res) => {
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      res.send(result);
+      res.json(result);
     });
 });
 
@@ -90,12 +90,12 @@ app.get("/details/:id", (req, res) => {
     .find({ id: id })
     .toArray((err, result) => {
       if (err) {
-        res.send({
+        res.json({
           message: "Server side Error",
           status: "500",
         });
       }
-      res.send(result);
+      res.json(result);
     });
 });
 
@@ -104,15 +104,15 @@ app.post("/placeOrder", (req, res) => {
   if (db) {
     db.collection("orders").insertOne(req.body, (err, result) => {
       if (err) {
-        res.send({
+        res.json({
           message: "! Not found",
           status: "500",
         });
       }
-      res.send(result);
+      res.json(result);
     });
   } else {
-    res.send({
+    res.json({
       message: "Error while connecting to db",
       status: "300",
     });
@@ -126,7 +126,7 @@ app.get("/orders/:email", (req, res) => {
     .find({ email })
     .toArray((err, result) => {
       if (err) throw err;
-      res.send(result);
+      res.json(result);
     });
 });
 
@@ -147,14 +147,14 @@ app.put("/updateOrder", (req, res) => {
       },
       (err, result) => {
         if (err) throw err;
-        res.send({
+        res.json({
           status: 200,
           message: "order updated successfully",
         });
       }
     );
   else {
-    res.send({
+    res.json({
       message: "db connection error",
       status: "404",
     });
@@ -166,7 +166,7 @@ app.delete("/deleteOrder", (req, res) => {
   let _id = mongo.ObjectId(req.query.id);
   db.collection("orderdata").remove({ _id }, (err, result) => {
     if (err) throw err;
-    res.send({
+    res.json({
       message: "order deleted",
       status: "200",
     });
