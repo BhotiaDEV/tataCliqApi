@@ -8,12 +8,14 @@ let mongoURL =
   "mongodb+srv://test:test123@cluster0.v86nyzc.mongodb.net/?retryWrites=true&w=majority";
 let port = process.env.PORT || 7800;
 let bodyparser = require("body-parser");
+let cors = require("cors");
 // const { RedoTwoTone } = require("@material-ui/icons");
 // const { ErrorSharp } = require("@material-ui/icons");
 let db;
 
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
+app.use(cors());
 
 // products based on brandId
 
@@ -25,7 +27,7 @@ app.get("/", (req, res) => {
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      res.json(result);
+      res.send(result);
     });
 });
 
@@ -36,7 +38,7 @@ app.get("/:categoryId", (req, res) => {
     .find({ category_id: categoryId })
     .toArray((err, result) => {
       if (err) throw err;
-      res.json(result);
+      res.send(result);
     });
 });
 
@@ -79,7 +81,7 @@ app.get("/filter/:productId", (req, res) => {
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      res.json(result);
+      res.send(result);
     });
 });
 
@@ -90,12 +92,12 @@ app.get("/details/:id", (req, res) => {
     .find({ id: id })
     .toArray((err, result) => {
       if (err) {
-        res.json({
+        res.send({
           message: "Server side Error",
           status: "500",
         });
       }
-      res.json(result);
+      res.send(result);
     });
 });
 
@@ -104,15 +106,15 @@ app.post("/placeOrder", (req, res) => {
   if (db) {
     db.collection("orders").insertOne(req.body, (err, result) => {
       if (err) {
-        res.json({
+        res.send({
           message: "! Not found",
           status: "500",
         });
       }
-      res.json(result);
+      res.send(result);
     });
   } else {
-    res.json({
+    res.send({
       message: "Error while connecting to db",
       status: "300",
     });
@@ -126,7 +128,7 @@ app.get("/orders/:email", (req, res) => {
     .find({ email })
     .toArray((err, result) => {
       if (err) throw err;
-      res.json(result);
+      res.send(result);
     });
 });
 
@@ -147,14 +149,14 @@ app.put("/updateOrder", (req, res) => {
       },
       (err, result) => {
         if (err) throw err;
-        res.json({
+        res.send({
           status: 200,
           message: "order updated successfully",
         });
       }
     );
   else {
-    res.json({
+    res.send({
       message: "db connection error",
       status: "404",
     });
@@ -166,7 +168,7 @@ app.delete("/deleteOrder", (req, res) => {
   let _id = mongo.ObjectId(req.query.id);
   db.collection("orderdata").remove({ _id }, (err, result) => {
     if (err) throw err;
-    res.json({
+    res.send({
       message: "order deleted",
       status: "200",
     });
