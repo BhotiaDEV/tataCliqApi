@@ -12,7 +12,6 @@ let cors = require("cors");
 // const { RedoTwoTone } = require("@material-ui/icons");
 // const { ErrorSharp } = require("@material-ui/icons");
 let db;
-
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 app.use(cors());
@@ -31,20 +30,20 @@ app.get("/", (req, res) => {
     });
 });
 
-// products based on category
-app.get("/:categoryId", (req, res) => {
-  let categoryId = Number(req.params.categoryId);
+// products based on PRODUCT
+app.get("/:productId", (req, res) => {
+  let productId = Number(req.params.productId);
   db.collection("productdata")
-    .find({ category_id: categoryId })
+    .find({ product_id: productId })
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
     });
 });
 
-// filter products based on product type , brands , price and discount
-app.get("/filter/:productId", (req, res) => {
-  let productId = Number(req.params.productId);
+// filter categorys based on category type , brands , price and discount
+app.get("/filter/:categoryId", (req, res) => {
+  let categoryId = Number(req.params.categoryId);
   let lcost = Number(req.query.lcost);
   let hcost = Number(req.query.hcost);
   let mindiscount = Number(req.query.mindiscount);
@@ -54,13 +53,13 @@ app.get("/filter/:productId", (req, res) => {
 
   if (brandId && lcost && hcost) {
     query = {
-      product_id: productId,
+      category_id: categoryId,
       brand_id: brandId,
       $and: [{ price: { $gt: lcost, $lt: hcost } }],
     };
   } else if (lcost && hcost) {
     query = {
-      product_id: productId,
+      category_id: categoryId,
       $and: [{ price: { $gt: lcost, $lt: hcost } }],
     };
   } else if (mindiscount && maxdiscount) {
@@ -69,12 +68,12 @@ app.get("/filter/:productId", (req, res) => {
     query = { discount: { $gt: mindiscount } };
   } else if (brandId) {
     query = {
-      product_id: productId,
+      category_id: categoryId,
       brand_id: brandId,
     };
   } else {
     query = {
-      product_id: productId,
+      category_id: categoryId,
     };
   }
   db.collection("productdata")
