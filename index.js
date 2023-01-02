@@ -29,6 +29,15 @@ app.get("/", (req, res) => {
       res.send(result);
     });
 });
+// brand data
+app.get("/brands", (req, res) => {
+  db.collection("branddata")
+    .find({})
+    .toArray((err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+});
 
 // products based on PRODUCT
 app.get("/:productId", (req, res) => {
