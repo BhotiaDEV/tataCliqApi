@@ -112,7 +112,7 @@ app.get("/details/:id", (req, res) => {
 // place a order
 app.post("/placeOrder", (req, res) => {
   if (db) {
-    db.collection("orders").insertOne(req.body, (err, result) => {
+    db.collection("orderdata").insertOne(req.body, (err, result) => {
       if (err) {
         res.send({
           message: "! Not found",
