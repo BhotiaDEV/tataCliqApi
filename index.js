@@ -9,8 +9,6 @@ let mongoURL =
 let port = process.env.PORT || 7800;
 let bodyparser = require("body-parser");
 let cors = require("cors");
-// const { RedoTwoTone } = require("@material-ui/icons");
-// const { ErrorSharp } = require("@material-ui/icons");
 let db;
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
@@ -36,6 +34,24 @@ app.get("/brands", (req, res) => {
       res.send(result);
     });
 });
+//orders
+app.get("/orders", (req, res) => {
+  let email = req.query.email;
+  let query = {}
+  if(email){
+  query = { email };
+  } 
+  else {
+    query = {};
+  }
+  db.collection("orderdata")
+    .find(query)
+    .toArray((err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+});
+
 
 // products based on PRODUCT
 app.get("/:productId", (req, res) => {
@@ -103,10 +119,11 @@ app.get("/details/:id", (req, res) => {
       res.send(result);
     });
 });
+
 // place a order
 app.post("/placeOrder", (req, res) => {
   if (db) {
-    db.collection("orders").insertOne(req.body, (err, result) => {
+    db.collection("orderdata").insert(req.body, (err, result) => {
       if (err) {
         res.send({
           message: "! Not found",
@@ -120,18 +137,9 @@ app.post("/placeOrder", (req, res) => {
       message: "Error while connecting to db",
       status: "300",
     });
-  }
+  }f
 });
-// list of orders w.r.t. email
-app.get("/orders/:email", (req, res) => {
-  let email = req.params.email;
-  db.collection("orderdata")
-    .find({ email })
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+
 // update payment details
 app.put("/updateOrder", (req, res) => {
   if (db)
