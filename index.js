@@ -15,9 +15,7 @@ let db;
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 app.use(cors());
-
 // products based on brandId
-
 app.get("/", (req, res) => {
   let brandId = Number(req.query.brandId);
   let query = {};
@@ -49,7 +47,6 @@ app.get("/:productId", (req, res) => {
       res.send(result);
     });
 });
-
 // filter categorys based on category type , brands , price and discount
 app.get("/filter/:categoryId", (req, res) => {
   let categoryId = Number(req.params.categoryId);
@@ -59,7 +56,6 @@ app.get("/filter/:categoryId", (req, res) => {
   let maxdiscount = Number(req.query.maxdiscount);
   let brandId = Number(req.query.brandId);
   let query = {};
-
   if (brandId && lcost && hcost) {
     query = {
       category_id: categoryId,
@@ -92,7 +88,6 @@ app.get("/filter/:categoryId", (req, res) => {
       res.send(result);
     });
 });
-
 // details of product
 app.get("/details/:id", (req, res) => {
   let id = Number(req.params.id);
@@ -108,11 +103,10 @@ app.get("/details/:id", (req, res) => {
       res.send(result);
     });
 });
-
 // place a order
 app.post("/placeOrder", (req, res) => {
   if (db) {
-    db.collection("orderdata").insertOne(req.body, (err, result) => {
+    db.collection("orders").insertOne(req.body, (err, result) => {
       if (err) {
         res.send({
           message: "! Not found",
@@ -128,23 +122,16 @@ app.post("/placeOrder", (req, res) => {
     });
   }
 });
-
 // list of orders w.r.t. email
-app.get("/orders", (req, res) => {
-  let email = req.query.email;
-  let query = {};
-  if(email)
-    query = {
-      email: email
-    }
+app.get("/orders/:email", (req, res) => {
+  let email = req.params.email;
   db.collection("orderdata")
-    .find( query )
+    .find({ email })
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
     });
 });
-
 // update payment details
 app.put("/updateOrder", (req, res) => {
   if (db)
@@ -175,7 +162,6 @@ app.put("/updateOrder", (req, res) => {
     });
   }
 });
-
 // delete order
 app.delete("/deleteOrder", (req, res) => {
   let _id = mongo.ObjectId(req.query.id);
@@ -187,14 +173,12 @@ app.delete("/deleteOrder", (req, res) => {
     });
   });
 });
-
 MongoClient.connect(mongoURL, (err, client) => {
   if (err) {
     console.log(err);
   }
   db = client.db("tataCliq");
 });
-
 app.listen(port, () => {
   console.log(`${port}`);
   console.log(`${mongoURL}`);
