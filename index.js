@@ -34,7 +34,7 @@ app.get("/brands", (req, res) => {
       res.send(result);
     });
 });
-//orders
+//order list
 app.get("/orders", (req, res) => {
   let email = req.query.email;
   let query = {}
