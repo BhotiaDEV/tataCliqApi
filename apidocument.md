@@ -50,7 +50,7 @@
 
 > list of order details based on email
 
-- https://tatacliqapi.onrender.com/orders/gp.com
+- https://tatacliqapi.onrender.com/orders/?gp.com
 
 > update order payment details
 

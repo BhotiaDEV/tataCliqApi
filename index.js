@@ -132,8 +132,13 @@ app.post("/placeOrder", (req, res) => {
 // list of orders w.r.t. email
 app.get("/orders", (req, res) => {
   let email = req.query.email;
+  let query = {};
+  if(email)
+    query = {
+      email: email
+    }
   db.collection("orderdata")
-    .find({ email })
+    .find({ query })
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
