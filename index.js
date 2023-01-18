@@ -138,7 +138,7 @@ app.get("/orders", (req, res) => {
       email: email
     }
   db.collection("orderdata")
-    .find({ query })
+    .find( query )
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
