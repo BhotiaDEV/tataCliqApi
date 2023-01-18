@@ -130,8 +130,8 @@ app.post("/placeOrder", (req, res) => {
 });
 
 // list of orders w.r.t. email
-app.get("/orders/:email", (req, res) => {
-  let email = req.params.email;
+app.get("/orders", (req, res) => {
+  let email = req.query.email;
   db.collection("orderdata")
     .find({ email })
     .toArray((err, result) => {
