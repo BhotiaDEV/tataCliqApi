@@ -141,34 +141,52 @@ app.post("/placeOrder", (req, res) => {
 });
 
 // update payment details
-app.put("/updateOrder", (req, res) => {
-  if (db)
-    db.collection("orderdata").updateOne(
+// app.put("/updateOrder", (req, res) => {
+//   if (db)
+//     db.collection("orderdata").updateOne(
+//       {
+//         id: Number(req.body.id),
+//       },
+//       {
+//         $set: {
+//           bank_name: req.body.bank_name,
+//           status: req.body.status,
+//           date: req.body.date,
+//         },
+//       },
+//       (err, result) => {
+//         if (err) throw err;
+//         res.send({
+//           status: 200,
+//           message: "order updated successfully",
+//         });
+//       }
+//     );
+//   else {
+//     res.send({
+//       message: "db connection error",
+//       status: "404",
+//     });
+//   }
+// });
+
+app.put('/updateOrder/:id',(req,res) => {
+  let oid = Number(req.params.id);
+  db.collection('orderdata').updateOne(
+      {id:oid},
       {
-        id: Number(req.body.id),
-      },
-      {
-        $set: {
-          bank_name: req.body.bank_name,
-          status: req.body.status,
-          date: req.body.date,
-        },
-      },
-      (err, result) => {
-        if (err) throw err;
-        res.send({
-          status: 200,
-          message: "order updated successfully",
-        });
+          $set:{
+              "status":req.body.status,
+              "bank_name":req.body.bank_name,
+              "date":req.body.date
+          }
+      },(err,result) => {
+          if(err) throw err;
+          res.send('Order Updated')
       }
-    );
-  else {
-    res.send({
-      message: "db connection error",
-      status: "404",
-    });
-  }
-});
+  )
+})
+
 // delete order
 app.delete("/deleteOrder", (req, res) => {
   let _id = mongo.ObjectId(req.query.id);
