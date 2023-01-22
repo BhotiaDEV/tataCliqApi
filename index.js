@@ -145,14 +145,13 @@ app.put("/updateOrder", (req, res) => {
   if (db)
     db.collection("orderdata").updateOne(
       {
-        order_id: Number(req.body.id),
+        id: Number(req.body.id),
       },
       {
         $set: {
           bank_name: req.body.bank_name,
           status: req.body.status,
           date: req.body.date,
-          email: req.body.email,
         },
       },
       (err, result) => {

@@ -94,7 +94,7 @@ productDetails.post("/placeOrder", (req, res) => {
 // list of orders w.r.t. email
 productDetails.get("/orders/:email", (req, res) => {
   let email = req.params.email;
-  db.collection("orderdata")
+  db.collection("branddata")
     .find({ email })
     .toArray((err, result) => {
       if (err) throw err;
